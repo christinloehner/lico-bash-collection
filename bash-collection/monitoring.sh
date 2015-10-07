@@ -1,7 +1,5 @@
 #!/bin/bash
 
-NUM_OF_CPU_CORES=12
-
 apps1="nginx php5-fpm dovecot memcached SCREEN mono"
 apps2="master clamd smtpd icinga2 "
 
@@ -19,6 +17,7 @@ iotop=$( iotop -b -n 1 | grep "Actual DISK READ" | head -n 1 )
 cpus=($( mpstat -P ALL 1 1 | awk '/Average:/ && $2 ~ /[0-9]/ {printf "%d\n",$3}' ))
 net=$( tail -n 1 /tmp/netstat.log | xargs )
 updates=$( cat /var/lib/update-notifier/updates-available | xargs | cut -d " " -f 1 )
+NUM_OF_CPU_CORES=$( nproc )
 if [[ "$updates" = "" ]]; then
 	updates=0
 fi
